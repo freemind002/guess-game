@@ -2,7 +2,7 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::io;
 
-/// 讀取使用者輸入並轉換成 [`u32`]。
+/// 讀取使用者輸入並轉換成 [`i32`]。
 ///
 /// 如果使用者輸入的內容無法轉換成數字，
 /// 就會要求使用者重新輸入。
@@ -16,7 +16,7 @@ use std::io;
 /// ```
 /// let number = read_number();
 /// ```
-fn read_number() -> u32 {
+fn read_number() -> i32 {
     loop {
         let mut input = String::new();
 
@@ -47,7 +47,7 @@ fn read_number() -> u32 {
 /// ```
 /// let (min, max) = read_range();
 /// ```
-fn read_range() -> (u32, u32) {
+fn read_range() -> (i32, i32) {
     loop {
         println!("請輸入最小數字：");
         let min = read_number();
@@ -67,23 +67,23 @@ fn read_range() -> (u32, u32) {
 /// 執行猜數字遊戲。
 ///
 /// 持續要求使用者輸入猜測數字，並與指定的答案比較。
-/// 根據比較結果提示使用者猜測的數字太小、太大或猜測正確。
+/// 如果猜測數字超出指定範圍，會要求使用者重新輸入。
 ///
 /// # Arguments
 ///
+/// * `min` - 可以猜測的最小值。
+/// * `max` - 可以猜測的最大值。
 /// * `secret_number` - 遊戲中預先產生的正確答案。
-///
-/// # Example
-///
-/// ```
-/// let secret_number = 50;
-/// guess_number(secret_number);
-/// ```
-fn guess_number(secret_number: u32) {
+fn guess_number(min: i32, max: i32, secret_number: i32) {
     loop {
         println!("請輸入你的猜測數字。");
 
         let guess = read_number();
+
+        if guess < min || guess > max {
+            println!("請輸入 {min}～{max} 範圍內的數字！");
+            continue;
+        }
 
         println!("你的猜測數字：{guess}");
 
@@ -110,5 +110,5 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(min..=max);
 
-    guess_number(secret_number);
+    guess_number(min, max, secret_number);
 }
